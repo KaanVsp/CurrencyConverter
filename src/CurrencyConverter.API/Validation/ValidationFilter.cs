@@ -1,4 +1,7 @@
-﻿namespace CurrencyConverter.API.Validation
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+
+namespace CurrencyConverter.API.Validation
 {
     public class ValidationFilter : IAsyncActionFilter
     {

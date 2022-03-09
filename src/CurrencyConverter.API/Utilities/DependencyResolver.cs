@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using CurrencyConverter.Data.Repositories;
 using CurrencyConverter.Domain.DTOs;
 using CurrencyConverter.Domain.Services;
 
@@ -8,7 +9,13 @@ namespace CurrencyConverter.API.Utilities
     {
         protected override void Load(ContainerBuilder builder)
         {
+            LoadRepositories(builder);
             LoadServices(builder);
+        }
+
+        private void LoadRepositories(ContainerBuilder builder)
+        {
+            builder.RegisterType<CurrencyRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
         }
 
         private void LoadServices(ContainerBuilder builder)
