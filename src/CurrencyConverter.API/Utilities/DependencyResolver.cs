@@ -20,6 +20,7 @@ namespace CurrencyConverter.API.Utilities
 
         private void LoadServices(ContainerBuilder builder)
         {
+            builder.RegisterType<CurrencyService>().AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterType<HttpClientRequester<IRequestModel, IResponseModel>>().AsImplementedInterfaces().InstancePerLifetimeScope();
         }
     }

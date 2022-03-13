@@ -17,12 +17,14 @@ namespace CurrencyConverter.Data.Repositories
         public async Task<List<Currency>> GetAll()
         {
             return await _context.Currencies
+                .Include(x => x.Rates)
                 .ToListAsync();
         }
 
         public async Task<Currency> GetById(int Id)
         {
             return await _context.Currencies
+                .Include(x => x.Rates)
                 .FirstOrDefaultAsync(x => x.Id == Id);
         }
 
@@ -86,6 +88,29 @@ namespace CurrencyConverter.Data.Repositories
 
                 _context.SaveChanges();
             }
+        }
+
+        public async Task UpdateRate(int CurrencyId, double NewRate)
+        {
+            var currency = await _context.Currencies
+                .Include(x => x.Rates)
+                .Where(x => x.Id == CurrencyId)
+                .FirstOrDefaultAsync();
+
+            if (currency != null)
+            {
+                currency.Rates.FirstOrDefault().Rate = NewRate;
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<List<Currency>> GetCurrencies(int FirstCurrencyId, int SecondCurrencyId)
+        {
+            return await _context.Currencies
+                .Include(x => x.Rates)
+                .Where(x => x.Id == FirstCurrencyId || x.Id == SecondCurrencyId)
+                .ToListAsync();
         }
     }
 }
