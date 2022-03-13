@@ -10,5 +10,11 @@ namespace CurrencyConverter.Domain.Entities
         public int SecondCurrencyId { get; set; }
         public virtual Currency SecondCurrency { get; set; }
         public double Rate { get; set; }
+
+        public CurrencyRate(DateTime InsertTime, double Rate)
+        {
+            this.InsertTime = InsertTime;
+            this.Rate = Rate;
+        }
     }
 }

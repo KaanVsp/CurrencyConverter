@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CurrencyConverter.Domain.Entities
 {
@@ -8,5 +7,20 @@ namespace CurrencyConverter.Domain.Entities
     {
         public string Symbol { get; set; }
         public virtual List<CurrencyRate> Rates { get; set; } = new List<CurrencyRate>();
+
+        public Currency()
+        {
+
+        }
+
+        public Currency Clone()
+        {
+            return new Currency()
+            {
+                InsertTime = this.InsertTime,
+                Symbol = this.Symbol,
+                Rates = new List<CurrencyRate>()
+            };
+        }
     }
 }
