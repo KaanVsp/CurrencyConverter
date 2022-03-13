@@ -28,14 +28,22 @@ namespace CurrencyConverter.Data.Repositories
 
         public async Task AddNewRates(List<Currency> Currencies, string BaseSymbol)
         {
-            var existingCurrencies = _context.Currencies.ToList();
+            var existingCurrencies = _context.Currencies
+                .Include(x => x.Rates)
+                .ToList();
 
             if (existingCurrencies.Count == 0)
             {
                 existingCurrencies = this.CreateInitialCurrencies(Currencies);
             }
+            else
+            {
+                // To outdate existing rates
+                DateTime now = DateTime.Now;
+                existingCurrencies.ForEach(x => x.Rates.FirstOrDefault().DeleteTime = now);
+            }
 
-            this.AddChilds(existingCurrencies, Currencies, BaseSymbol);
+            this.AddCurrentRates(existingCurrencies, Currencies, BaseSymbol);
 
             _context.SaveChanges();
         }
@@ -55,7 +63,7 @@ namespace CurrencyConverter.Data.Repositories
             return onlyParents;
         }
 
-        private void AddChilds(List<Currency> ExistingCurrencies, List<Currency> NewRates, string BaseSymbol)
+        private void AddCurrentRates(List<Currency> ExistingCurrencies, List<Currency> NewRates, string BaseSymbol)
         {
             int? baseCurrencyId = ExistingCurrencies.FirstOrDefault(x => x.Symbol == BaseSymbol)?.Id;
 
